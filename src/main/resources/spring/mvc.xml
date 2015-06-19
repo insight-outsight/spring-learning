@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
+
+	<context:component-scan base-package="org.springlearning" />
+
+	<!-- 如果当前请求为“/”时，则转发到“/helloworld/index”。
+	<mvc:view-controller path="/" view-name="forward:/helloworld/index"/> -->
+	
+	<!-- 静态资源映射 -->
+	<mvc:resources mapping="/css/**" location="/css/" />
+	<mvc:resources mapping="/js/**" location="/js/" />
+
+	<!-- 当上面要访问的静态资源不包括在上面的配置中时，则根据此配置来访问 -->
+	<mvc:default-servlet-handler />
+
+
+	<!--开启mvc映射注解支持，它是为了简化配置的缩写形式，它相当于启用以下2个<bean>配置：	
+	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> 
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver"/>
+	从spring mvc 3.1起，对应变更为 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/> 
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"/>
+
+	原DefaultAnnotationHandlerMapping、AnnotationMethodHandlerAdapter和AnnotationMethodHandlerExceptionResolver已过时。
+	这些创建过程在org.springframework.web.servlet.DispatcherServlet类initStrategies方法初始化，如下：
+	
+	protected void initStrategies(ApplicationContext context) {
+		initMultipartResolver(context);
+		initLocaleResolver(context);
+		initThemeResolver(context);
+		initHandlerMappings(context);
+		initHandlerAdapters(context);
+		initHandlerExceptionResolvers(context);
+		initRequestToViewNameTranslator(context);
+		initViewResolvers(context);
+		initFlashMapManager(context);
+	}
+	
+	关于mvc:annotation-driven究竟做了什么，查看spring-webmvc-4.1.5.RELEASE.jar下/META-INF/spring.handlers内容如下：
+	http\://www.springframework.org/schema/mvc=org.springframework.web.servlet.config.MvcNamespaceHandler
+	表明所有以mvc开头的标签使用MvcNamespaceHandler类来处理，再查看MvcNamespaceHandler类有如下方法：
+		@Override
+		public void init() {
+			registerBeanDefinitionParser("annotation-driven", new AnnotationDrivenBeanDefinitionParser());
+			registerBeanDefinitionParser("default-servlet-handler", new DefaultServletHandlerBeanDefinitionParser());
+			registerBeanDefinitionParser("interceptors", new InterceptorsBeanDefinitionParser());
+			registerBeanDefinitionParser("resources", new ResourcesBeanDefinitionParser());
+			registerBeanDefinitionParser("view-controller", new ViewControllerBeanDefinitionParser());
+			registerBeanDefinitionParser("redirect-view-controller", new ViewControllerBeanDefinitionParser());
+			registerBeanDefinitionParser("status-controller", new ViewControllerBeanDefinitionParser());
+			registerBeanDefinitionParser("view-resolvers", new ViewResolversBeanDefinitionParser());
+			registerBeanDefinitionParser("tiles-configurer", new TilesConfigurerBeanDefinitionParser());
+			registerBeanDefinitionParser("freemarker-configurer", new FreeMarkerConfigurerBeanDefinitionParser());
+			registerBeanDefinitionParser("velocity-configurer", new VelocityConfigurerBeanDefinitionParser());
+			registerBeanDefinitionParser("groovy-configurer", new GroovyMarkupConfigurerBeanDefinitionParser());
+		}	
+		
+	当然，如果不使用<mvc:annotation-driven/>也可以直接在配置文件使用<bean>定义相应的元素，例如：	
+	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter" p:ignoreDefaultModelOnRedirect="true" >
+   		<property name="messageConverters"> 
+       		<list>
+       		<ref bean="byteArray_hmc" /> 
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"> 
+                <property name="supportedMediaTypes"> 
+                   <list> 
+                       <value>text/plain;charset=UTF-8</value>
+                       <value>text/html;charset=UTF-8</value>
+                       <value>application/json;charset=UTF-8</value> 
+                   </list> 
+                </property> 
+             </bean>
+             <ref bean="resource_hmc" />  
+             <ref bean="source_hmc" />  
+             <ref bean="xmlAwareForm_hmc" />  
+             <ref bean="jaxb2RootElement_hmc" />  
+             <bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter"/>   
+       		</list>
+   		</property>
+	</bean>      
+    <bean id="byteArray_hmc" class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+    <bean id="resource_hmc" class="org.springframework.http.converter.ResourceHttpMessageConverter" />
+    <bean id="source_hmc" class="org.springframework.http.converter.xml.SourceHttpMessageConverter" />
+    <bean id="xmlAwareForm_hmc" class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter" />
+    <bean id="jaxb2RootElement_hmc" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+
+
+    <bean id="handlerExceptionResolver" class="com.pss.res.base.exceptionresolver.AnnotationHandlerMethodExceptionResolver">
+        <property name="defaultErrorView" value="error/500"/> 
+        <property name="messageConverters">
+            <list>
+                <bean	class="org.springframework.http.converter.ByteArrayHttpMessageConverter" />
+                <bean	class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+            </list>
+        </property>
+    </bean>
+	 -->
+	<mvc:annotation-driven> <!-- 可选属性 validator="validator" message-codes-resolver="bean ref" conversion-service="" -->
+		<!-- 		
+		<mvc:return-value-handlers>
+	        <bean></bean>
+	    </mvc:return-value-handlers>
+	    
+	    <mvc:argument-resolvers>
+    	</mvc:argument-resolvers>
+    
+    	<mvc:path-matching/>
+    	<mvc:async-support/> 
+    	-->
+    	
+		<!--
+		<mvc:message-converters register-defaults="true">
+		   	<bean class="org.springframework.http.converter.ByteArrayHttpMessageConverter"/> 
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter"/> 
+			<bean class="org.springframework.http.converter.ResourceHttpMessageConverter"/> 
+			<bean class="org.springframework.http.converter.xml.SourceHttpMessageConverter "/> 
+			<bean class="org.springframework.http.converter.xml.XmlAwareFormHttpMessageConverter"/> 
+			<bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter"/> 
+			<bean class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" 
+			p:supportedMediaTypes="*"/>
+		 </mvc:message-converters>
+		  -->
+	</mvc:annotation-driven>
+
+	<!-- web表单输入校验器，目前使用的实现是-->
+	<!-- 
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.1.3.Final</version>
+		</dependency>
+	 
+	<bean
+		class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor">
+		<property name="validator" ref="validator" />
+	</bean>
+	
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<property name="validationMessageSource" ref="messageSource" />
+	</bean>
+
+	<bean id="messageSource"
+		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+		<property name="basenames">
+			<list>
+				<value>classpath:messages</value>
+				<value>classpath:org/hibernate/validator/ValidationMessages</value>
+			</list>
+		</property>
+		<property name="useCodeAsDefaultMessage" value="false" />
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="cacheSeconds" value="60" />
+	</bean>
+ 	-->	
+ 	
+	<bean id="localeResolver"
+		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="cookieName" value="cloc" />
+		<property name="cookieMaxAge" value="-1" />
+		<!-- <property name="defaultLocale" value="en_US"/> -->
+	</bean>
+
+	<!--  	
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"/>
+	-->
+
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10000000" />
+	</bean>
+
+
+	<!-- Resolve jsp's -->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- 
+	Spring为我们提供了：
+		org.springframework.web.servlet.HandlerInterceptor接口和
+		org.springframework.web.servlet.handler.HandlerInterceptorAdapter适配器，
+	实现这个接口或继承此类，可以非常方便的实现自己的拦截器。 
+	-->
+	<!--
+	<mvc:interceptors>  
+	  <mvc:interceptor>  
+	        <mvc:mapping path="/user/*" /> 
+	        <bean class="com.mvc.MyInteceptor"></bean>  
+	    </mvc:interceptor>  
+	</mvc:interceptors>  
+	-->
+	
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+</beans>

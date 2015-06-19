@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>coupon service proxy</title>
+<script type="text/javascript" charset="UTF-8">
+	document.domain = "dangdang.com";
+	function sendRequest(method, url) {
+		var xmlHttpRequest = new XMLHttpRequest();
+		xmlHttpRequest.open(method, url, true);
+		xmlHttpRequest.onreadystatechange = function () {
+		    if (xmlHttpRequest.readyState == 4 && xmlHttpRequest.status == 200) {
+		        //document.getElementById("result").innerHTML = xmlHttpRequest.responseText;
+		        window.parent.processData(xmlHttpRequest.responseText);
+		    }
+		}
+		xmlHttpRequest.send(null);
+	}
+</script>
+</head>
+<body>
+
+</body>
+</html>

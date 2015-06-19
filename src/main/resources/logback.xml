@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds" debug="false">
+
+	<property name="log_history_day" value="${springlearning.logback.log_history_day}" />
+	<property name="log_history_hour" value="${springlearning.logback.log_history_hour}" />
+	<property name="log_dir" value="${springlearning.logback.log_dir}" />
+	<property name="log_pattern" value="%d{MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n%ex" />
+
+	<!-- 全部日志 -->
+	<appender name="all" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+		<file>${log_dir}all.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}all.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">    
+    	<!-- encoder 默认配置为PatternLayoutEncoder -->    
+    	<encoder>    
+      		<pattern>${log_pattern}</pattern>    
+    	</encoder>    
+  	</appender>
+  
+    <appender name="debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>DEBUG</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}debug.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}debug.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+			<maxHistory>${log_history_hour}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>	
+	
+  	<appender name="info" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}info.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>	
+
+	
+	<!-- 警告日志 -->
+	<appender name="warn" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>WARN</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}warn.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}warn.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+<!-- 			<immediateFlush>false</immediateFlush> -->
+		</encoder>
+	</appender>
+
+	<!-- 错误日志 -->
+	<appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}error.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 定时任务INFO日志 -->
+	<appender name="timeTaskInfo" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>INFO</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}time-task-info.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}time-task-info.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- 定时任务ERROR日志 -->
+	<appender name="timeTaskError" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.LevelFilter">
+			<level>ERROR</level>
+			<onMatch>ACCEPT</onMatch>
+			<onMismatch>DENY</onMismatch>
+		</filter>
+		<file>${log_dir}time-task-error.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log_dir}time-task-error.log.%d{yyyy-MM-dd}</fileNamePattern>
+			<maxHistory>${log_history_day}</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>${log_pattern}</pattern>
+		</encoder>
+	</appender>
+	
+    <logger name="org.springlearning" level="${springlearning.logback.minlevel}" additivity="false">
+        <appender-ref ref="debug" />
+        <appender-ref ref="info" />
+        <appender-ref ref="warn" />
+        <appender-ref ref="error" />
+    </logger>
+    
+    <logger name="timeTask" level="INFO" additivity="false">
+    	<appender-ref ref="timeTaskInfo" />
+    	<appender-ref ref="timeTaskError" />
+    </logger>
+
+	<root level="INFO">
+		<appender-ref ref="all" />
+	</root>
+
+</configuration>
