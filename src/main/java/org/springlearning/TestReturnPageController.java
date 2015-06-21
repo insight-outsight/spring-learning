@@ -111,6 +111,13 @@ public class TestReturnPageController extends BaseController {
 		return map;
 	}
 
+	/**
+	 * ModelMap 返回值为modelMap时，响应页面映射到/WEB-INF/views/testReturnPage/list.jsp.。
+	 * 只是存储在List中的数据可以在jsp页面中取出。页面可使用${requestScope.userList}展示数据.
+	 * 
+	 * 默认约定规则由DefaultRequestToViewNameTranslator定义，详细可查看相关说明。
+	 * 
+	 */
 	@RequestMapping(value="list.do",params="type=list_string")
 	public List<User> resultList_String(){
 		List<User> ls = new ArrayList<User>();
