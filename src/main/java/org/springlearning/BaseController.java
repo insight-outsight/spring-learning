@@ -42,7 +42,7 @@ public class BaseController {
 		System.out.println("er");
 		LOG.error("",ex);
 
-		return generateErrorActivityResponse(111509,"system error"); 
+		return generateErrorActivityResponse(-1,"system error"); 
 		
 	}
 	
