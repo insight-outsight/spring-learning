@@ -107,7 +107,12 @@
         </property>
     </bean>
 	 -->
-	<mvc:annotation-driven> <!-- 可选属性 validator="validator" message-codes-resolver="bean ref" conversion-service="" -->
+	 
+	<mvc:annotation-driven>
+	    <!-- mvc:annotation-driven可选属性
+	    	conversion-service=""  validator="validator" 
+	    	message-codes-resolver="bean ref" content-negotiation-manager="contentNegotiationManager"
+	    	enable-matrix-variables="true" ignore-default-model-on-redirect="false"-->
 		<!-- 		
 		<mvc:return-value-handlers>
 	        <bean></bean>
@@ -167,6 +172,22 @@
 	</bean>
  	-->	
  	
+ 	<!--  
+	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+		<property name="favorPathExtension" value="false" />
+		<property name="favorParameter" value="false" />
+		<property name="ignoreAcceptHeader" value="false" />
+		<property name="mediaTypes">
+			<props>  
+                 <prop key="plain">text/plain;charset=utf-8</prop>  
+                 <prop key="html">text/html;charset=utf-8</prop>  
+                 <prop key="json">application/json;charset=utf-8</prop>  
+                 <prop key="xml">application/xml;charset=utf-8</prop> 
+            </props>  
+		</property>
+	</bean>
+	-->
+	
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="cookieName" value="cloc" />
@@ -174,9 +195,13 @@
 		<!-- <property name="defaultLocale" value="en_US"/> -->
 	</bean>
 
-	<!--  	
-	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" />
+	<!-- 	
+	<bean class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" >
+		<property name="order" value="1" /> 
+	</bean>
+	
 	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"/>
+	<bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 	-->
 
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
