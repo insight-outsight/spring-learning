@@ -11,17 +11,36 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springlearning.aop.Eat;
 import org.springlearning.model.User;
 
 
 /**
  * 测试Controller中方法返回类型对响应视图的内容的差异
+ * 
+ * 当Controller中的处理器方法没有返回一个View对象或String类型代表的逻辑视图名称，并且在该方法中返回类型不是void时，
+ * Spring就会采用约定好的方式提供一个逻辑视图名称。这个逻辑视图名称是通过Spring定义的
+ * org.springframework.web.servlet.RequestToViewNameTranslator接口的getViewName方法来实现的，
+ * 我们可以实现自己的RequestToViewNameTranslator接口来约定好没有返回视图名称的时候如何确定视图名称。
+ * Spring已经给我们提供了一个它自己的实现，那就是
+ * org.springframework.web.servlet.view.DefaultRequestToViewNameTranslator。
+ * 在介绍DefaultRequestToViewNameTranslator是如何约定视图名称之前我们先来看一下它支持用户定义的属性：
+ *	（1）prefix：前缀，表示约定好的视图名称需要加上的前缀，默认是空串。
+ *	（2）suffix：后缀，表示约定好的视图名称需要加上的后缀，默认是空串。
+ *	（3）separator：分隔符，默认是斜杠“/”。
+ *	（4）stripLeadingSlash：如果首字符是分隔符，是否要去除，默认是true。
+ *	（5）stripTrailingSlash：如果最后一个字符是分隔符，是否要去除，默认是true。
+ *	（6）stripExtension：如果请求路径包含扩展名是否要去除，默认是true。
+ *	（7）urlDecode：是否需要对URL解码，默认是true。它会采用request指定的编码或者ISO-8859-1编码对URL进行解码。
+ * 当我们没有在SpringMVC的配置文件中手动的定义一个名为viewNameTranlator的bean的时候（必须定义为这个名称），
+ * Spring就会为我们提供一个 默认的viewNameTranslator，即DefaultRequestToViewNameTranslator。
  * 
  * 1.使用 String,ModelAndView作为请求处理方法的返回视图名称，返回视图名称可以不受请求的url绑定，
  * 这样返回的逻辑视图名不会和请求 URL绑定，String和ModelAndView可以设置返回的视图名称。
@@ -34,6 +53,7 @@ import org.springlearning.model.User;
  *		<propety name="suffix" value=".jsp" />
  *	</bean>
  * 3.使用@ResponseBody可指定返回类型为application/json。
+ * 
  */
 
 @Controller
@@ -42,7 +62,9 @@ public class TestReturnPageController extends BaseController {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(TestReturnPageController.class);
 	
-
+	@Autowired
+	Eat eat;
+	
 	@RequestMapping(value="/json.do", method=RequestMethod.GET)
 	@ResponseBody
     public BaseResponse testReturnJSON(HttpServletRequest request,
@@ -53,6 +75,7 @@ public class TestReturnPageController extends BaseController {
 
 		try{
 			System.out.println("i m okKyyy,bn");
+			eat.doIt(444);
 			//response.setContentType("text/html");		
 		} catch (Exception e) {
 			LOG.error("",e);

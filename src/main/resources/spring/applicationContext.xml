@@ -12,7 +12,7 @@
     <!-- Activates scanning of @Autowired -->
 
     <!-- Activates scanning of @Repository and @Service -->
-    <context:component-scan base-package="com.dangdang.coupon.module"/>
+    <context:component-scan base-package="org.springlearning"/>
     
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" 
 		p:systemPropertiesMode="1" 
@@ -26,7 +26,21 @@
 		</property> 
 	</bean>
 	
-	
+	  	<aop:config>   
+        <aop:aspect id="eatAspect" ref="eatAspectBean">
+            <aop:pointcut id="dddd"   
+                expression="execution(public * org.springlearning.aop.Eat.doIt*(..))" />   
+<!--             <aop:before pointcut-ref="businessService" method="doBefore"/>   
+            <aop:after pointcut-ref="businessService" method="doAfter"/>  -->  
+            <aop:around pointcut-ref="dddd"
+             method="applyAop"/>   
+<!--             <aop:after-throwing pointcut-ref="businessService" method="doThrowing" throwing="ex"/> -->   
+        </aop:aspect>   
+    </aop:config>   
+
+	<bean id="eatAspectBean" class="org.springlearning.aop.EatAspect" />   
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
 <!-- 	<import resource="dao.xml"/> -->
     
 </beans>
