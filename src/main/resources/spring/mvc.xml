@@ -108,9 +108,9 @@
     </bean>
 	 -->
 	 
-	<mvc:annotation-driven>
+	<mvc:annotation-driven conversion-service="conversionService">
 	    <!-- mvc:annotation-driven可选属性
-	    	conversion-service=""  validator="validator" 
+	    	conversion-service="conversionService"  validator="validator" 
 	    	message-codes-resolver="bean ref" content-negotiation-manager="contentNegotiationManager"
 	    	enable-matrix-variables="true" ignore-default-model-on-redirect="false"-->
 		<!-- 		
@@ -188,6 +188,14 @@
 	</bean>
 	-->
 	
+	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
+    	<property name="converters">
+      		<set>
+        		<bean class="org.springlearning.converters.UserLevelEnumConverter" />
+      		</set>
+    	</property>
+  	</bean>
+  
 	<bean id="localeResolver"
 		class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
 		<property name="cookieName" value="cloc" />

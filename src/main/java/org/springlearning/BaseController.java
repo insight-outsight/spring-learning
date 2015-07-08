@@ -33,14 +33,13 @@ public class BaseController {
 		if (ex instanceof HttpMessageNotReadableException) {// json format is not match the @RequestBody type
 			LOG.error("spring mvc parse json error. request URL:{}",request.getRequestURI());		
 		} else if (ex instanceof MissingServletRequestParameterException) {// param-missing
-			LOG.error("spring mvc params missing. request URL:{}",request.getRequestURI());	
+			LOG.error("spring mvc params missing. request URL:{}",request.getRequestURI());
 		} else if (ex instanceof HttpMediaTypeNotAcceptableException) {// mime TYPE NOT MATCH
-			LOG.error("spring mvc mime type not match. request URL:{}",request.getRequestURI());	
+			LOG.error("spring mvc mime type not match. request URL:{}",request.getRequestURI());
 		} else{
     		LOG.error("spring mvc error:");
 		}
-		System.out.println("er");
-		LOG.error("",ex);
+		LOG.error("BaseResponse Catched Error",ex);
 
 		return generateErrorActivityResponse(-1,"system error"); 
 		
