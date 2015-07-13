@@ -87,7 +87,7 @@ public class TestReturnPageController extends BaseController {
     public BaseResponse testReturnJSON(HttpServletRequest request,
     		HttpServletResponse response){
 		
-		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.success);
+		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.Success);
 		activityResponse.setErrCode(0);
 
 		try{

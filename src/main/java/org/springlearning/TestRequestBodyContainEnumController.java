@@ -26,6 +26,10 @@ import org.springlearning.model.User;
  * 测试在请求参数传入枚举值，由mvc:annotation-driven的conversion-service="conversionService"定义
  * 的org.springlearning.converters.UserLevelEnumConverter来
  * 执行从数字（比如1，2）到 UserLevelEnum的转换
+ * 否则报错：
+ * org.springframework.beans.TypeMismatchException: 
+ * Failed to convert value of type 'java.lang.String' to required type 'UserLevelEnum'; 
+ *
  * @author xuzhengchao
  *
  */
@@ -41,7 +45,7 @@ public class TestRequestBodyContainEnumController extends BaseController {
     public BaseResponse test(User user,HttpServletRequest request,
     		HttpServletResponse response){
 		
-		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.success);
+		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.Success);
 		activityResponse.setErrCode(0);
 
 		try{
