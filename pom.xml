@@ -65,7 +65,13 @@
 					<compilerVersion>${project.build.jdk.version}</compilerVersion>
 					<source>${project.build.jdk.version}</source>
 					<target>${project.build.jdk.version}</target>
+					<testSource>>${project.build.jdk.version}</testSource>
+					<testTarget>>${project.build.jdk.version}</testTarget>
 					<encoding>${project.build.compiler.encoding}</encoding>
+<!-- 		未3测试			<compilerArgs>
+            				<arg>-verbose</arg>
+            				<arg>-Xlint:all,-options,-path</arg>
+          			</compilerArgs> -->
 				</configuration>
 			</plugin>
 			<!--  
