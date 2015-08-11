@@ -1,4 +1,4 @@
-package org.springlearning;
+package org.springlearning.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springlearning.aop.Eat;
 import org.springlearning.model.User;
+import org.springlearning.model.result.ActivityResponse;
+import org.springlearning.model.result.BaseResponse;
 
 /**
  * 测试在请求参数传入枚举值，由mvc:annotation-driven的conversion-service="conversionService"定义
@@ -46,7 +48,7 @@ public class TestRequestBodyContainEnumController extends BaseController {
     		HttpServletResponse response){
 		
 		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.Success);
-		activityResponse.setErrCode(0);
+		activityResponse.setErrorCode(0);
 
 		try{
 			System.out.println(user);

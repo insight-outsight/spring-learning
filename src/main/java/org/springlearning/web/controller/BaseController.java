@@ -1,4 +1,4 @@
-package org.springlearning;
+package org.springlearning.web.controller;
 
 
 
@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springlearning.model.BizException;
 import org.springlearning.model.ErrorCodeEnum;
+import org.springlearning.model.result.ActivityResponse;
+import org.springlearning.model.result.BaseResponse;
 
 
 
@@ -71,8 +73,8 @@ public class BaseController {
 	
 	protected BaseResponse<?> generateErrorActivityResponse(int errCode,String errMsg){
 		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.Failure);
-		activityResponse.setErrCode(errCode);
-		activityResponse.setErrMsg(errMsg);
+		activityResponse.setErrorCode(errCode);
+		activityResponse.setErrorMessage(errMsg);
 		return activityResponse;
 	}
 	

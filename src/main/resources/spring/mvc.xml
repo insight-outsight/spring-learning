@@ -172,21 +172,133 @@
 	</bean>
  	-->	
  	
- 	<!--  
-	<bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+ 	<!--  -->
+	<bean id="contentNegotiationManager3518" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
 		<property name="favorPathExtension" value="false" />
 		<property name="favorParameter" value="false" />
-		<property name="ignoreAcceptHeader" value="false" />
+		<property name="ignoreAcceptHeader" value="true" />
+<!-- 		<property name="parameterName" value="format" /> -->
 		<property name="mediaTypes">
-			<props>  
-                 <prop key="plain">text/plain;charset=utf-8</prop>  
-                 <prop key="html">text/html;charset=utf-8</prop>  
-                 <prop key="json">application/json;charset=utf-8</prop>  
-                 <prop key="xml">application/xml;charset=utf-8</prop> 
-            </props>  
+			<map>  
+		        <entry key="plain" value="text/plain;charset=utf-8"/>  
+		        <entry key="html" value="text/html;charset=utf-8"/>  
+		        <entry key="json" value="application/json;charset=utf-8"/>  
+		        <entry key="xml" value="application/xml;charset=utf-8"/>  
+      		</map> 
 		</property>
+<!-- 		<property name="defaultContentType" value="text/html" /> -->
+		<property name="defaultContentType" value="application/json" /> 
 	</bean>
-	-->
+	
+    
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="order" value="0" />
+        <property name="contentNegotiationManager" ref="contentNegotiationManager3518"/>
+        <property name="defaultViews">
+            <list>
+            
+<!--                 <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+                    <property name="prettyPrint" value="true"/>
+                    <property name="extractValueFromSingleKeyModel" value="true"/>
+                    <property name="contentType" value="text/plain"/>  
+                    <property name="jsonpParameterNames">
+            			<set>
+                			<value>jsonp</value>
+               				<value>callback</value>
+            			</set>
+       				</property>
+                </bean>  -->
+                <!-- 还可以自己扩展view 
+                <bean class="org.springlearning.views.MappingJacksonJson2ViewExd" />
+                -->
+<!--                 <bean class="org.springframework.web.servlet.view.xml.MarshallingView">  
+                    <constructor-arg>  
+                        <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">  
+                            <property name="packagesToScan">  
+                                <list>  
+                                    <value>com.sample.model.your.packageToScan</value>  
+                                </list>  
+                            </property>  
+                        </bean>  
+                    </constructor-arg>  
+                </bean>  -->
+            </list>
+        </property>
+		<property name="viewResolvers"><!-- 针对freemarker的视图配置 -->   
+            <list>  
+<!--                 <bean class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">  
+                    <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>  
+                    <property name="viewNames" value=".ftl"/>  
+                    <property name="contentType" value="text/html; charset=utf-8"/>  
+                    <property name="cache" value="true" />  
+                    <property name="prefix" value="" />  
+                    <property name="suffix" value=".ftl" />  
+                    <property name="order" value="2"/>  
+                </bean>  --> 
+                <!--<bean id="liteDeviceDelegatingViewResolver" class="org.springframework.mobile.device.view.LiteDeviceDelegatingViewResolver">-->  
+                    <!--<constructor-arg>-->  
+                        <!--<bean-->  
+                                <!--class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">-->  
+                            <!--<property name="cache" value="true"/>-->  
+                            <!--<property name="requestContextAttribute" value="rc"/>-->  
+                            <!--<property name="prefix" value=""/>-->  
+                            <!--<property name="suffix" value=".ftl"/>-->  
+                            <!--<property name="exposeSpringMacroHelpers" value="true"/>-->  
+                            <!--<property name="exposeRequestAttributes" value="true"/>-->  
+                            <!--<property name="exposeSessionAttributes" value="true"/>-->  
+                            <!--<property name="contentType" value="text/html;charset=UTF-8"/>-->  
+                        <!--</bean>-->  
+                    <!--</constructor-arg>-->  
+  
+                    <!--<property name="mobilePrefix" value="mobile/" />-->  
+                    <!--<property name="tabletPrefix" value="tablet/" />-->  
+                    <!--<property name="enableFallback" value="true" />-->  
+                <!--</bean>-->  
+                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+                    <property name="prefix" value="/WEB-INF/view/jsssp/"></property><!-- 配置页面路径 -->  
+                    <property name="suffix" value=".jsp"></property><!-- 文件以value值结尾 -->  
+                </bean>  
+            </list>  
+        </property>  
+    </bean>
+    
+    <!--  
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="mediaTypes">
+            <map>
+                	告诉视图解析器，返回的类型为json格式 
+                <entry key="json" value="application/json" />
+            </map>
+        </property>
+        <property name="defaultViews">
+            <list>
+                 ModelAndView里的数据变成JSON 
+                <bean class="org.springframework.web.servlet.view.json.MappingJacksonJsonView" />
+            </list>
+        </property>
+    </bean>
+    -->
+    
+	<!--     
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="contentType" value="text/html;charset=UTF-8" />
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean> 
+    -->
+    
+    <!-- Resolve jsp's -->
+<!-- 	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean> -->
+	<!-- 
+	<bean id="jacksonJsonView" class="org.springframework.web.servlet.view.json.MappingJacksonJsonView"/>
+	 -->
+<!-- 	<bean id="jackson2JsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+	 -->
 	
 	<bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
     	<property name="converters">
@@ -216,13 +328,6 @@
 		<property name="maxUploadSize" value="10000000" />
 	</bean>
 
-
-	<!-- Resolve jsp's -->
-	<bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-		<property name="prefix" value="/WEB-INF/views/" />
-		<property name="suffix" value=".jsp" />
-	</bean>
 
 	<!-- 
 	Spring为我们提供了：

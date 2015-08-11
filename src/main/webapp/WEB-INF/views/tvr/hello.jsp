@@ -7,8 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-这是map结果返回页
-<hr>
 ${key1 }
 </body>
 </html>

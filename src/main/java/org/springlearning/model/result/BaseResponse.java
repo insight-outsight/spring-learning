@@ -1,4 +1,4 @@
-package org.springlearning;
+package org.springlearning.model.result;
 
 
 public class BaseResponse<T> {

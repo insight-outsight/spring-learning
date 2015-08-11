@@ -1,4 +1,4 @@
-package org.springlearning;
+package org.springlearning.web.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springlearning.aop.Eat;
+import org.springlearning.model.Address;
 import org.springlearning.model.User;
+import org.springlearning.model.result.ActivityResponse;
+import org.springlearning.model.result.BaseResponse;
 
 
 /**
@@ -88,7 +91,7 @@ public class TestReturnPageController extends BaseController {
     		HttpServletResponse response){
 		
 		ActivityResponse activityResponse = new ActivityResponse(BaseResponse.Status.Success);
-		activityResponse.setErrCode(0);
+		activityResponse.setErrorCode(0);
 
 		try{
 			System.out.println("i m okKyyy,bn");
@@ -107,6 +110,16 @@ public class TestReturnPageController extends BaseController {
     }
 	  
 
+	@RequestMapping(value="/json22.do", method=RequestMethod.GET)
+	@ResponseBody
+    public Address testReturnJSON2(HttpServletRequest request,
+    		HttpServletResponse response){
+
+		System.out.println("i m okKyyy,bn");
+		return new Address("beijing","jianguoRoad");	
+		
+    }
+	
 	/**
 	 * 返回页面映射到/WEB-INF/views/testReturnPage/returnMap.jsp.
 	 * */

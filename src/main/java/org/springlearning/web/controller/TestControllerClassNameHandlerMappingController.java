@@ -1,4 +1,4 @@
-package org.springlearning;
+package org.springlearning.web.controller;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
