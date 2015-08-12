@@ -10,8 +10,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
 
-	<context:component-scan base-package="org.springlearning" />
-
+	
 	<!-- 如果当前请求为“/”时，则转发到“/helloworld/index”。
 	<mvc:view-controller path="/" view-name="forward:/helloworld/index"/> -->
 	
