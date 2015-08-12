@@ -253,11 +253,12 @@
                     <!--<property name="mobilePrefix" value="mobile/" />-->  
                     <!--<property name="tabletPrefix" value="tablet/" />-->  
                     <!--<property name="enableFallback" value="true" />-->  
-                <!--</bean>-->  
-                <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
-                    <property name="prefix" value="/WEB-INF/view/jsssp/"></property><!-- 配置页面路径 -->  
-                    <property name="suffix" value=".jsp"></property><!-- 文件以value值结尾 -->  
-                </bean>  
+                <!--</bean>-->    
+                <bean class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+					<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+					<property name="prefix" value="/WEB-INF/viewws/" />
+					<property name="suffix" value=".jsp" />
+				</bean>
             </list>  
         </property>  
     </bean>
@@ -283,7 +284,7 @@
 	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="contentType" value="text/html;charset=UTF-8" />
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-        <property name="prefix" value="/pages/"/>
+        <property name="prefix" value="/WEB-INF/jsps/"/>
         <property name="suffix" value=".jsp"/>
     </bean> 
     -->

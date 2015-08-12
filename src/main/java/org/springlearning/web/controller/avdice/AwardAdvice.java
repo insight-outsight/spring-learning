@@ -21,7 +21,7 @@ public class AwardAdvice implements ResponseBodyAdvice<ActivityResponse> {
 
     @Override
     public boolean supports(MethodParameter methodParameter, Class<? extends HttpMessageConverter<?>> converterType) {
-        logger.debug("support2 determined3 apply controller advice ");
+        logger.debug("supports determined applid in controller advice.");
 
     	return methodParameter.getMethod().getReturnType().isAssignableFrom(ActivityResponse.class);
     }
@@ -32,7 +32,7 @@ public class AwardAdvice implements ResponseBodyAdvice<ActivityResponse> {
             Class<? extends HttpMessageConverter<?>> converterType,
             ServerHttpRequest serverHttpRequest, ServerHttpResponse serverHttpResponse) {
 
-        logger.debug("apply2 controller3 advice {}",activityResponse.toString());
+        logger.debug("beforeBodyWrite applid in controller advice, {}",activityResponse.toString());
         return activityResponse;
         
     }
