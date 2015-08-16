@@ -10,7 +10,57 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd">
 
+	<!-- 
+	<xsd:schema xmlns="http://www.springframework.org/schema/mvc" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:beans="http://www.springframework.org/schema/beans" xmlns:tool="http://www.springframework.org/schema/tool" targetNamespace="http://www.springframework.org/schema/mvc" elementFormDefault="qualified" attributeFormDefault="unqualified">
+		<xsd:import namespace="http://www.springframework.org/schema/beans" schemaLocation="http://www.springframework.org/schema/beans/spring-beans-4.1.xsd"/>
+		<xsd:import namespace="http://www.springframework.org/schema/tool" schemaLocation="http://www.springframework.org/schema/tool/spring-tool-4.1.xsd"/>
+		<xsd:element name="annotation-driven">...</xsd:element>
+		<xsd:complexType name="content-version-strategy">...</xsd:complexType>
+		<xsd:complexType name="fixed-version-strategy">...</xsd:complexType>
+		<xsd:complexType name="resource-version-strategy">...</xsd:complexType>
+		<xsd:complexType name="version-resolver">...</xsd:complexType>
+		<xsd:complexType name="resource-resolvers">...</xsd:complexType>
+		<xsd:complexType name="resource-transformers">...</xsd:complexType>
+		<xsd:complexType name="resource-chain">...</xsd:complexType>
+		<xsd:element name="resources">...</xsd:element>
+		<xsd:element name="default-servlet-handler">...</xsd:element>
+		<xsd:element name="interceptors">...</xsd:element>
+		<xsd:element name="view-controller">...</xsd:element>
+		<xsd:element name="redirect-view-controller">...</xsd:element>
+		<xsd:element name="status-controller">...</xsd:element>
+		<xsd:complexType name="contentNegotiationType">...</xsd:complexType>
+		<xsd:complexType name="urlViewResolverType">...</xsd:complexType>
+		<xsd:element name="view-resolvers">
+		<xsd:annotation>
+		<xsd:documentation>
+		<![CDATA[
+		Configure a chain of ViewResolver instances to resolve view names returned from controllers into actual view instances to use for rendering. All registered resolvers are wrapped in a single (composite) ViewResolver with its order property set to 0 so that other external resolvers may be ordered before or after it. When content negotiation is enabled the order property is set to highest priority instead with the ContentNegotiatingViewResolver encapsulating all other registered view resolver instances. That way the resolvers registered through the MVC namespace form self-encapsulated resolver chain.
+		]]>
+		</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+		<xsd:choice minOccurs="1" maxOccurs="unbounded">
+		<xsd:element name="content-negotiation" type="contentNegotiationType">...</xsd:element>
+		<xsd:element name="jsp" type="urlViewResolverType">...</xsd:element>
+		<xsd:element name="tiles" type="urlViewResolverType">...</xsd:element>
+		<xsd:element name="freemarker" type="urlViewResolverType">...</xsd:element>
+		<xsd:element name="velocity" type="urlViewResolverType">...</xsd:element>
+		<xsd:element name="groovy" type="urlViewResolverType">...</xsd:element>
+		<xsd:element name="bean-name" maxOccurs="1">...</xsd:element>
+		<xsd:element ref="beans:bean">...</xsd:element>
+		<xsd:element ref="beans:ref">...</xsd:element>
+		</xsd:choice>
+		<xsd:attribute name="order" type="xsd:int">...</xsd:attribute>
+		</xsd:complexType>
+		</xsd:element>
+		<xsd:element name="tiles-configurer">...</xsd:element>
+		<xsd:element name="freemarker-configurer">...</xsd:element>
+		<xsd:element name="velocity-configurer">...</xsd:element>
+		<xsd:element name="groovy-configurer">...</xsd:element>
+	</xsd:schema>
 	
+	 -->
+	 
 	<!-- 如果当前请求为“/”时，则转发到“/helloworld/index”。
 	<mvc:view-controller path="/" view-name="forward:/helloworld/index"/> -->
 	
@@ -195,8 +245,8 @@
         <property name="contentNegotiationManager" ref="contentNegotiationManager3518"/>
         <property name="defaultViews">
             <list>
-            
-<!--                 <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+            	<!-- 
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
                     <property name="prettyPrint" value="true"/>
                     <property name="extractValueFromSingleKeyModel" value="true"/>
                     <property name="contentType" value="text/plain"/>  
@@ -206,11 +256,13 @@
                				<value>callback</value>
             			</set>
        				</property>
-                </bean>  -->
+                </bean>
+                  -->
                 <!-- 还可以自己扩展view 
                 <bean class="org.springlearning.views.MappingJacksonJson2ViewExd" />
                 -->
-<!--                 <bean class="org.springframework.web.servlet.view.xml.MarshallingView">  
+                <!-- 
+           		<bean class="org.springframework.web.servlet.view.xml.MarshallingView">  
                     <constructor-arg>  
                         <bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">  
                             <property name="packagesToScan">  
@@ -220,7 +272,8 @@
                             </property>  
                         </bean>  
                     </constructor-arg>  
-                </bean>  -->
+                </bean> 
+                 -->
             </list>
         </property>
 		<property name="viewResolvers"><!-- 针对freemarker的视图配置 -->   
