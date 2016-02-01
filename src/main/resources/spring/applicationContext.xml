@@ -26,7 +26,7 @@
 		</property> 
 	</bean>
 	
-	  	<aop:config>   
+	  	<aop:config>   <!-- expose-proxy="true" -->
         <aop:aspect id="eatAspect" ref="eatAspectBean">
             <aop:pointcut id="dddd"   
                 expression="execution(public * org.springlearning.aop.Eat.doIt*(..))" />   
@@ -35,6 +35,8 @@
             <aop:around pointcut-ref="dddd"
              method="applyAop"/>   
 <!--             <aop:after-throwing pointcut-ref="businessService" method="doThrowing" throwing="ex"/> -->   
+ 		<!-- 定义切面<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut"/> -->
+        
         </aop:aspect>   
     </aop:config>   
 
