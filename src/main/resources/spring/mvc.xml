@@ -72,7 +72,7 @@
 	<mvc:default-servlet-handler />
 
 
-	<!--开启mvc映射注解支持，它是为了简化配置的缩写形式，它相当于启用以下2个<bean>配置：	
+	<!--开启mvc:annotation-driven支持，它是为了简化配置的缩写形式，它相当于启用以下3个<bean>配置：	
 	<bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping"/> 
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter"/>
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerExceptionResolver"/>
