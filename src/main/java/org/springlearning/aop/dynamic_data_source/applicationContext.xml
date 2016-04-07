@@ -9,6 +9,8 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
+	<context:component-scan base-package="org.springlearning.aop.dynamic_data_source"/>
+
 	<bean id="dynamicDataSource"
 		class="org.springlearning.aop.dynamic_data_source.DynamicBoneCPDataSource">
 		<!-- 已在DynamicBoneCPDataSource.addSourceBeanToSpringContainer创建下面DataSources
