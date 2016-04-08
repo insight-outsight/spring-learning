@@ -9,30 +9,33 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
-public class DynamicDataSourceTset {
+public class LaunchDynamicDataSource {
+	
     public static void main(String[] args) {
-
-       
        try (ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
     		   new String[]{"org/springlearning/aop/dynamic_data_source/applicationContext.xml"});
        ) {
+//    	   DynamicBoneCPDataSource dynamicDataSource = ac.getBean(DynamicBoneCPDataSource.class);
+    	  
     	   DynamicDataSourceDAOImpl dynamicDataSourceDAOImpl = ac.getBean(DynamicDataSourceDAOImpl.class);
     	   IndexUserPhone indexUserPhone = new IndexUserPhone();
-    	   indexUserPhone.setCheckStatus(2);
+    	   indexUserPhone.setCheckStatus(624);
     	   indexUserPhone.setCreateTime(new Date());
     	   indexUserPhone.setLastModifiedTime(new Date());
-    	   indexUserPhone.setIsSelfManage(1);
-    	   indexUserPhone.setMobliePhoneNumber("180000000");
-    	   indexUserPhone.setRandCode("ewtwyw");
-    	   indexUserPhone.setStatus(1);
-    	   indexUserPhone.setUid(74324252l);
+    	   indexUserPhone.setIsSelfManage(2);
+    	   indexUserPhone.setMobliePhoneNumber("19900003412");
+    	   indexUserPhone.setRandCode("笑话");
+    	   indexUserPhone.setStatus(2);
+    	   indexUserPhone.setUid(66324250l);
     	   try {
-    		   ContextDataSourceKeyHolder.setDataSourceKey("eagle2.ods");
-			dynamicDataSourceDAOImpl.insert(indexUserPhone );
-		} catch (Exception e) {
-			System.out.println("yyyyyyy");
-			e.printStackTrace();
-		}
+    		   ContextDataSourceKeyHolder.setDataSourceKey("eagle2.business");
+    		   long insertedId = dynamicDataSourceDAOImpl.insert(indexUserPhone );
+    		   System.out.println("insert OK ,id="+insertedId);
+			} catch (Exception e) {
+				System.out.println("测试DynamicDataSource出现异常");
+				e.printStackTrace();
+			}
        }
     }
+    
 }

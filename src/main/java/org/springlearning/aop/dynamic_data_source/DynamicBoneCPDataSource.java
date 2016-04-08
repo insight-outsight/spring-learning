@@ -42,16 +42,19 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
     public void onApplicationEvent(ApplicationEvent event) {    
         //如果是容器刷新事件    
         if(event instanceof ContextRefreshedEvent ){   
+        	System.out.println(event.getClass().getSimpleName()+" 事件接收到！"); 
             try {  
                 registerDynamicDataSourceBean();  
-            } catch (IOException e) {  
+            } catch (Exception e) { 
+            	System.out.println(e.getMessage()+" 错误!!");  
                 e.printStackTrace();  
             }  
-            //System.out.println(event.getClass().getSimpleName()+" 事件已发生！");  
-        } 
+            System.out.println(event.getClass().getSimpleName()+" 事件已发生！");  
+        }
+        
     }    
   
-    private void registerDynamicDataSourceBean() throws IOException{  
+    private void registerDynamicDataSourceBean() throws Exception{  
         // 解析属性文件，得到数据源Map  
         Map<String, DataSourceInfo> mapDataSource = parsePropertiesFile("dynamicDataSources.properties");  
         // 把数据源bean注册到容器中  
@@ -98,6 +101,7 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
             targetDataSources.put(beanKey, acf.getBean(beanKey));  
             
         }
+        System.out.println(targetDataSources);
         //  将创建的map对象set到 targetDataSources；  
         setTargetDataSources(targetDataSources);         
         //  必须执行此操作，才会重新初始化AbstractRoutingDataSource 中的 resolvedDataSources，也只有这样，动态切换才会起效  

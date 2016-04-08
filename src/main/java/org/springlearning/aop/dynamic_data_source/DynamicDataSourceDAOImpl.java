@@ -29,8 +29,8 @@ public class DynamicDataSourceDAOImpl implements DynamicDataSourceDAO {
 	private JdbcTemplate jdbcTemplate;
 	
 	private static final String INSERT_SQL = "insert into index_user_phone(uid"
-			+ ",mobile_phone_number,create_time,last_modified_time,status,rand_code,checked_status,"
-			+ "is_self_manage) values(?,?,?,?,?,?,?,?)";
+			+ ",mobile_phone_number,rand_code,create_time"
+			+ ") values(?,?,?,?)";
 
 			
 	@Override
@@ -42,12 +42,8 @@ public class DynamicDataSourceDAOImpl implements DynamicDataSourceDAO {
 		           PreparedStatement ps = connection.prepareStatement(INSERT_SQL,Statement.RETURN_GENERATED_KEYS);  
 		           ps.setLong(1, indexUserPhone.getUid());  
 		           ps.setString(2, indexUserPhone.getMobliePhoneNumber());
-		           ps.setDate(3, new Date(2016,4,8));
-		           ps.setDate(4,new Date(2016,4,8));
-		           ps.setInt(5, indexUserPhone.getStatus());
-		           ps.setString(6, indexUserPhone.getRandCode());
-		           ps.setInt(7, indexUserPhone.getCheckStatus());
-		           ps.setInt(8, indexUserPhone.getIsSelfManage());
+		           ps.setString(3, indexUserPhone.getRandCode());
+		           ps.setDate(4, new Date(16,4,8));
 		           return ps;  
 		    }  
 		}, keyHolder);  

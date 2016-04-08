@@ -13,14 +13,15 @@
 
 	<bean id="dynamicDataSource"
 		class="org.springlearning.aop.dynamic_data_source.DynamicBoneCPDataSource">
-		<!-- 已在DynamicBoneCPDataSource.addSourceBeanToSpringContainer创建下面DataSources
+		<!-- 已在DynamicBoneCPDataSource.addSourceBeanToSpringContainer创建下面DataSources-->
 		<property name="targetDataSources">
 			<map key-type="java.lang.String">
-				动态初始化map
+<!-- 				<entry value-ref="dataSourceA" key="dataSourceA"></entry>  -->
 			</map>
-		</property> -->
-		<property name="defaultTargetDataSource" ref="dataSource">
-		</property>
+		</property> 
+		<!-- 
+		<property name="defaultTargetDataSource" ref="dataSource"/>
+		 -->
 	</bean>
 	
 	<bean id="jdbcTemplate"  class="org.springframework.jdbc.core.JdbcTemplate" >  
