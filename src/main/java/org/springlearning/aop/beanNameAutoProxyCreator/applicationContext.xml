@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+
+	<bean class="org.springframework.transaction.interceptor.TransactionAttributeSourceAdvisor">
+		<property name="transactionInterceptor" ref="zwInterceptor" />
+	</bean>
+
+    <!-- DefaultAdvisorAutoProxyCreator搜索容器中的 advisor,并为每个bean创建代理 -->  
+	<bean  class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"/>  
+
+	<bean id="zwAutoProxyCreator" 
+			class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+		<property name="beanNames">
+			<value>*Service</value>
+		</property>
+		<!-- 
+		<property name="beanNames">
+			<list>
+				<idref bean="zwDao" />
+			</list>
+		</property>
+		 -->
+		<property name="interceptorNames">
+			<list>
+				<idref bean="zwInterceptor" />
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="zwInterceptor 
+			class="org.springframework.transaction.interceptor.TransactionInterceptor">
+		<property name="transactionManager">
+			<ref bean="transactionManager" />
+		</property>
+		<!-- 可以指定一个TransactionAttributeSource -->
+		<property name="transactionAttributeSource">
+			<ref local="listenerNameMatchBase" />
+		</property>
+		<!-- 也可以直接使用transactionAttributes属性设置相关值，其实Spring内部还是
+		会创建NameMatchTransactionAttributeSource，并把相关值设置给这个NameMatchTransactionAttributeSource
+		<property name="transactionAttributes">  
+            <props>  
+                <prop key="insert*">PROPAGATION_REQUIRED,ISOLATION_READ_COMMITTED</prop>  
+                <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>  
+                <prop key="*">PROPAGATION_REQUIRED</prop>  
+            </props>  
+        </property>
+        --> 
+	</bean>
+
+	<bean id="listenerNameMatchBase"
+			class="org.springframework.transaction.interceptor.NameMatchTransactionAttributeSource">
+		<!--  (设定事务的策略)-->
+		<property name="properties">
+			<props>
+			    <!-- (根据方法名字监控key方法这里是doafter,也可以是insert*等) -->
+				<prop key="doAfter">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+<!-- 配置事务管理器，注意这里的dataSource和SqlSessionFactoryBean的dataSource要一致，不然事务就没有作用了 -->
+
+<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+
+    <property name="dataSource" ref="dataSource" />
+
+</bean>
+
+</beans>
