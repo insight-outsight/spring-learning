@@ -9,4 +9,24 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
 
+    <!--方式二， 以下只对指定beanName的Bean作代理 ，不能与applicationContext.xml中方式一，proxy11FactroyBean同时配置，否则会报：
+    Exception in thread "main" org.springframework.beans.
+    factory.BeanNotOfRequiredTypeException: 
+    Bean named 'proxy11FactroyBean' must be of type [org.springlearning.
+    	aop.proxyfactory.Foo], but was actually of type [com.sun.proxy.$Proxy2]
+    原因是proxy11FactroyBean已经被BeanNameAutoProxyCreator代理了一次成为了com.sun.proxy.$Proxy2类型。
+    --> 
+    <bean class="org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator">
+        <property name="beanNames">
+            <list>
+                <value>*foo</value>
+            </list>
+        </property>
+        <property name="interceptorNames">
+            <list>
+                <value>fooBeforeAdvice</value>
+            </list>
+        </property>
+    </bean>
+    
 </beans>
