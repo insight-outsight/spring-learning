@@ -39,4 +39,25 @@
         <property name="staticMethod"><value>org.springlearning.beans.factory.config.MyBeanNameProvider.getName</value></property>  
     </bean>
 
+    <bean id="setSystemProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">  
+        <property name="targetClass">  
+            <value>java.lang.System</value>  
+        </property>  
+        <property name="targetMethod">  
+            <value>getProperties</value>  
+        </property>  
+    </bean> 
+    
+    <!-- 通过MethodInvokingFactoryBean为System设置property,
+                等价于调用System.setProperty("myproperty.kk", "xxx"); -->
+    <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+		<property name="targetObject" value="#{@systemProperties}" />
+		<property name="targetMethod" value="putAll" />
+		<property name="arguments">
+			<props>
+				<prop key="myproperty.kk">哇塞</prop>
+			</props>
+		</property>
+	</bean>
+	
 </beans>

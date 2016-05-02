@@ -16,6 +16,7 @@ public class Test {
         ApplicationContext ctx = new ClassPathXmlApplicationContext(
         		Test.class.getPackage().getName().replace(".", "/")+"/applicationContext.xml");  
         MyBean myBean = (MyBean) ctx.getBean("myBean");  
-        System.out.println(myBean);  
+        System.out.println(myBean);
+        System.out.println(System.getProperty("myproperty.kk"));
     }  
 }

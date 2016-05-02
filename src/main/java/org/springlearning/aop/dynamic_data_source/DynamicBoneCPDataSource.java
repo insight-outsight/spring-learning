@@ -3,10 +3,15 @@ import java.io.IOException;
 import java.util.HashMap;  
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;  
+import java.util.TreeMap;
 import java.util.regex.Matcher;  
 import java.util.regex.Pattern;  
   
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;  
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -20,11 +25,14 @@ import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.io.support.ResourcePropertySource;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
+import com.google.common.collect.Lists;
 import com.jolbox.bonecp.BoneCPDataSource;  
   
   
 public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implements ApplicationContextAware,ApplicationListener<ApplicationEvent> {  
   
+	private static final Logger LOG = LoggerFactory.getLogger(DynamicBoneCPDataSource.class);
+
     private ApplicationContext applicationContext;  
     
 
@@ -42,23 +50,25 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
     public void onApplicationEvent(ApplicationEvent event) {    
         //如果是容器刷新事件    
         if(event instanceof ContextRefreshedEvent ){   
-        	System.out.println(event.getClass().getSimpleName()+" 事件接收到！"); 
+        	LOG.info("{}接收到事件{}！",this.getClass().getSimpleName(),event.getClass().getSimpleName()); 
             try {  
                 registerDynamicDataSourceBean();  
             } catch (Exception e) { 
             	System.out.println(e.getMessage()+" 错误!!");  
                 e.printStackTrace();  
             }  
-            System.out.println(event.getClass().getSimpleName()+" 事件已发生！");  
+        	LOG.info("{}处理 事件{}完毕！",this.getClass().getSimpleName(),event.getClass().getSimpleName()); 
         }
         
     }    
   
     private void registerDynamicDataSourceBean() throws Exception{  
         // 解析属性文件，得到数据源Map  
-        Map<String, DataSourceInfo> mapDataSource = parsePropertiesFile("dynamicDataSources.properties");  
+        Map<String, DataSourceInfo> mapDataSource = parsePropertiesFile(Constants.dataSourcesInfoFileName);  
         // 把数据源bean注册到容器中  
         addDataSourceBeanToSpringContainer(mapDataSource); 
+        // 初始化sharding信息
+        ShardingInfoHolder.init();
     }
     
     /** 
@@ -68,10 +78,28 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
      */  
     private void addDataSourceBeanToSpringContainer(Map<String, DataSourceInfo> mapDataSource) {  
         DefaultListableBeanFactory acf = (DefaultListableBeanFactory) applicationContext.getAutowireCapableBeanFactory();  
-        BeanDefinition beanDefinition;  
-        BeanDefinitionBuilder bdb; 
+        BeanDefinition beanDefinition;
+        String parentDynamicBoneCPDataSourceId = "parentDynamicBoneCPDataSource";
+        BeanDefinitionBuilder beanDefinitionBuilder; 
         Iterator<String> iterator = mapDataSource.keySet().iterator(); 
         Map<Object,Object> targetDataSources = new LinkedHashMap<Object, Object>(); 
+        List<String> dataSourcesListArg = Lists.newArrayList();
+        
+        //创建parent bean定义
+        beanDefinitionBuilder = BeanDefinitionBuilder.rootBeanDefinition("com.jolbox.bonecp.BoneCPDataSource");  
+        beanDefinitionBuilder.getBeanDefinition().setAttribute("id", parentDynamicBoneCPDataSourceId);  
+        beanDefinitionBuilder.addPropertyValue("driverClass", "com.mysql.jdbc.Driver");  
+        beanDefinitionBuilder.addPropertyValue("connectionTimeoutInMs", 5000);  
+        beanDefinitionBuilder.addPropertyValue("maxConnectionAge", 0);  
+        beanDefinitionBuilder.addPropertyValue("idleMaxAge", 240);  
+        beanDefinitionBuilder.addPropertyValue("idleConnectionTestPeriod", 60);  
+        beanDefinitionBuilder.addPropertyValue("partitionCount", 3);  
+        beanDefinitionBuilder.addPropertyValue("maxConnectionsPerPartition", 30);  
+        beanDefinitionBuilder.addPropertyValue("minConnectionsPerPartition", 10); 
+        acf.registerBeanDefinition(parentDynamicBoneCPDataSourceId, beanDefinitionBuilder.getBeanDefinition()); 
+        LOG.info("{}",beanDefinitionBuilder.getBeanDefinition());
+        LOG.info("register ParentDynamicDataSource,key:{},value:{}",parentDynamicBoneCPDataSourceId,acf.getBean(parentDynamicBoneCPDataSourceId));
+        int i=0;
         while(iterator.hasNext()){  
             String beanKey = iterator.next();
             
@@ -87,25 +115,29 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
             ds.setUser(mapDataSource.get(beanKey).userName);  */
        
             //  创建bean  
-            bdb = BeanDefinitionBuilder.rootBeanDefinition("com.jolbox.bonecp.BoneCPDataSource");  
-            bdb.getBeanDefinition().setAttribute("id", beanKey);  
-            bdb.addPropertyValue("driverClass", "com.mysql.jdbc.Driver");  
-            bdb.addPropertyValue("jdbcUrl", mapDataSource.get(beanKey).connUrl);  
-            bdb.addPropertyValue("username", mapDataSource.get(beanKey).userName);  
-            bdb.addPropertyValue("password", mapDataSource.get(beanKey).password);  
-            bdb.addPropertyValue("connectionTimeoutInMs", 3600000);  
+            beanDefinitionBuilder = BeanDefinitionBuilder.childBeanDefinition(parentDynamicBoneCPDataSourceId);
+            beanDefinitionBuilder.getBeanDefinition().setAttribute("id", beanKey);   
+            beanDefinitionBuilder.addPropertyValue("jdbcUrl", mapDataSource.get(beanKey).connUrl);  
+            beanDefinitionBuilder.addPropertyValue("username", mapDataSource.get(beanKey).userName);  
+            beanDefinitionBuilder.addPropertyValue("password", mapDataSource.get(beanKey).password);  
+//            if(i++==1){
+//                beanDefinitionBuilder.addPropertyValue("connectionTimeoutInMs", 12000);  
+//            }
+            LOG.info("{}",beanDefinitionBuilder.getBeanDefinition());
             //  注册bean  
-            acf.registerBeanDefinition(beanKey, bdb.getBeanDefinition());  
+            acf.registerBeanDefinition(beanKey, beanDefinitionBuilder.getBeanDefinition());  
               
             //  放入map中，注意一定是刚才创建bean对象  
             targetDataSources.put(beanKey, acf.getBean(beanKey));  
-            
+            dataSourcesListArg.add(beanKey);
+            LOG.info("register DynamicDataSource,key:{},value:{}",beanKey,acf.getBean(beanKey));
         }
-        System.out.println(targetDataSources);
         //  将创建的map对象set到 targetDataSources；  
         setTargetDataSources(targetDataSources);         
         //  必须执行此操作，才会重新初始化AbstractRoutingDataSource 中的 resolvedDataSources，也只有这样，动态切换才会起效  
         afterPropertiesSet(); 
+        
+		ContextDataSourceKeyHolder.setDataSourceKeyList(dataSourcesListArg);
     }  
     /** 
      * 功能说明：解析属性文件，得到数据源Map 
@@ -119,14 +151,13 @@ public class DynamicBoneCPDataSource extends AbstractRoutingDataSource implement
         Matcher matcher;  
         Pattern pattern = Pattern.compile("^dds\\.(eagle2\\.\\w+)\\.jdbc\\.(jdbcUrl|user|password)$");  
           
-        Map<String, DataSourceInfo> mapDataSource = new HashMap<String,DataSourceInfo>();  
+        Map<String, DataSourceInfo> mapDataSource = new TreeMap<String,DataSourceInfo>();  
         // 根据配置文件解析数据源  
         for(String keyProp : props.getPropertyNames())  
         {  
             matcher = pattern.matcher(keyProp);  
             if(matcher.find()){  
                 String dsName = matcher.group(1);
-                System.out.println(dsName);
                 String dsPropName = matcher.group(2);  
                 DataSourceInfo dsi;  
                   
