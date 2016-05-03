@@ -56,6 +56,7 @@
 		<property name="arguments">
 			<props>
 				<prop key="myproperty.kk">哇塞</prop>
+				<prop key="logPath">/var/logs/myapp</prop>
 			</props>
 		</property>
 	</bean>

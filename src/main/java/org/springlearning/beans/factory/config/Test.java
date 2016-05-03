@@ -18,5 +18,6 @@ public class Test {
         MyBean myBean = (MyBean) ctx.getBean("myBean");  
         System.out.println(myBean);
         System.out.println(System.getProperty("myproperty.kk"));
+        System.out.println(System.getProperty("logPath"));
     }  
 }
