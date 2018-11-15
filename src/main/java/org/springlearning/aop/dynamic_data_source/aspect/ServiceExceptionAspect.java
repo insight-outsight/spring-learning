@@ -1,4 +1,4 @@
-package com.yanke.backend.api.dal.aspect;
+package org.springlearning.aop.dynamic_data_source.aspect;
 
 
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -7,8 +7,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springlearning.aop.dynamic_data_source.aspect.exception.ServiceException;
 
-import com.yanke.backend.api.exception.ServiceException;
+
 
 
 @Aspect 

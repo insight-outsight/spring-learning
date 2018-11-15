@@ -1,4 +1,4 @@
-package com.yanke.backend.api.dal.aspect.advice;
+package org.springlearning.aop.dynamic_data_source.aspect.advice;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -9,9 +9,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.stereotype.Component;
 
-import com.yanke.backend.api.dal.dynamic_data_source.ContextDataSourceKeyHolder;
-import com.yanke.backend.api.dal.dynamic_data_source.ShardingInfo;
-import com.yanke.backend.api.dal.dynamic_data_source.ShardingInfoHolder;
+import org.springlearning.aop.dynamic_data_source.ContextDataSourceKeyHolder;
+import org.springlearning.aop.dynamic_data_source.ShardingInfo;
+import org.springlearning.aop.dynamic_data_source.ShardingInfoHolder;
 
 //@Component
 public class InsertBehaviorAroundAdvice implements MethodInterceptor {

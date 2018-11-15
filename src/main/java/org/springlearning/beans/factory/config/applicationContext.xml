@@ -36,7 +36,9 @@
     </bean>  
       
      <bean id="myBeanName" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">  
-        <property name="staticMethod"><value>org.springlearning.beans.factory.config.MyBeanNameProvider.getName</value></property>  
+        <property name="staticMethod">
+            <value>org.springlearning.beans.factory.config.MyBeanNameProvider.getName</value>
+        </property>  
     </bean>
 
     <bean id="setSystemProps" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">  
