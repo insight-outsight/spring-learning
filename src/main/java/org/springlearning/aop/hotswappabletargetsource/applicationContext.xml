@@ -28,7 +28,7 @@
 		 -->
 	</bean>
 
-	<bean id="doTask" class="org.springlearning.aop.targetsource.DoRightImpl"/>
+	<bean id="doTask" class="org.springlearning.aop.hotswappabletargetsource.DoRightImpl"/>
 	<bean id="hotSwapTargetSource" class="org.springframework.aop.target.HotSwappableTargetSource">
 		<constructor-arg>
 			<ref bean="doTask" />

@@ -1,4 +1,4 @@
-package org.springlearning.aop.targetsource;
+package org.springlearning.aop.hotswappabletargetsource;
 
 public class TestUtils {
 

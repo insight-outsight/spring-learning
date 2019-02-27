@@ -1,4 +1,4 @@
-package org.springlearning.aop.targetsource;
+package org.springlearning.aop.hotswappabletargetsource;
 
 import org.springframework.aop.framework.Advised;
 import org.springframework.context.support.ClassPathXmlApplicationContext;

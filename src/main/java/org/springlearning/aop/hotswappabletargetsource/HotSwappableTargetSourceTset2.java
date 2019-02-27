@@ -1,4 +1,4 @@
-package org.springlearning.aop.targetsource;
+package org.springlearning.aop.hotswappabletargetsource;
 
 import org.springframework.aop.framework.Advised;
 import org.springframework.aop.target.HotSwappableTargetSource;
@@ -8,7 +8,7 @@ public class HotSwappableTargetSourceTset2 {
 	
 	public static void main(String[] args) throws Exception {
 		try (ClassPathXmlApplicationContext ac = new ClassPathXmlApplicationContext(
-				new String[] { "org/springlearning/aop/targetsource/applicationContext.xml" });) {
+				new String[] { HotSwappableTargetSourceTset2.class.getPackage().getName().replace(".", "/")+"/applicationContext.xml" });) {
 
 
 			HotSwappableTargetSource hotSwapTargetSource = 

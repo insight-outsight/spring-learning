@@ -19,10 +19,10 @@
 		p:searchSystemEnvironment="true" 
 		p:ignoreUnresolvablePlaceholders="true" > 
 		<property name="locations"> 
-		<list> 
-		<value>classpath:properties/app-part-a.properties</value> 
-		<value>classpath:properties/app-part-b.properties</value> 
-		</list> 
+		  <list> 
+		  <value>classpath:properties/app-part-a.properties</value> 
+		  <value>classpath:properties/app-part-b.properties</value> 
+		  </list> 
 		</property> 
 	</bean>
 	
