@@ -342,9 +342,10 @@
 		<profile>
 			<id>dev</id>
 			<activation>
-				<os>
+<!-- 				<os>
 					<family>windows</family>
-				</os>
+				</os> -->
+            <activeByDefault>true</activeByDefault>
 			</activation>
 			<properties>
 				<config.file>env/dev.properties</config.file>
