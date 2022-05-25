@@ -10,7 +10,7 @@
    <properties>
 		<project.build.jdk.version>1.8</project.build.jdk.version>
 		<project.build.compiler.encoding>UTF-8</project.build.compiler.encoding>
-		<spring.version>4.1.5.RELEASE</spring.version>
+		<spring.version>5.2.22.RELEASE</spring.version>
 		<logback.version>1.1.2</logback.version>
 		<slf4j.version>1.7.6</slf4j.version>
 		<jetty.version>9.2.9.v20150224</jetty.version>
